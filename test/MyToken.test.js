@@ -1,4 +1,5 @@
 const MyToken = artifacts.require("MyToken");
+const MyTokenSale = artifacts.require("MyTokenSale");
 
 var chai = require("chai");
 const BN = web3.utils.BN;
@@ -13,8 +14,12 @@ const expect = chai.expect;
 contract("MyToken Test", async (accounts) => {
     const [deployerAccount, recipientAccount, anotherAccount] = accounts;
 
+    beforeEach(async () => {
+        this.token = await MyToken.new(100000);
+    });
+
     it("All tokens should be in deployer account ", async () => {
-        let instance = await MyToken.deployed();
+        let instance = this.token;
         let totalSupply = await instance.totalSupply();
 
         expect(instance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(totalSupply);
@@ -22,7 +27,7 @@ contract("MyToken Test", async (accounts) => {
 
     it("It should be able to send tokens between accounts ", async () => {
         const sendToken = 1;
-        let instance = await MyToken.deployed();
+        let instance = this.token;
         let totalSupply = await instance.totalSupply();
 
         expect(instance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(totalSupply);
@@ -32,7 +37,7 @@ contract("MyToken Test", async (accounts) => {
     });
 
     it("Its not possible to send more tokens than available", async () => {
-        let instance = await MyToken.deployed();
+        let instance = this.token;
         let balanceOfDeployer = await instance.balanceOf(deployerAccount);
 
         expect(instance.transfer(recipientAccount, balanceOfDeployer + 1)).to.eventually.be.rejected;
