@@ -1,13 +1,11 @@
 const MyToken = artifacts.require("MyToken");
-const MyTokenSale = artifacts.require("MyTokenSale");
 
-var chai = require("chai");
+require("dotenv").config({
+    path: "../.env"
+});
+
+const chai = require("./chaiSetup.js");
 const BN = web3.utils.BN;
-const chaiBN = require("chai-bn")(BN);
-chai.use(chaiBN);
-
-var chaiAsPromised = require("chai-as-promised");
-chai.use(chaiAsPromised);
 
 const expect = chai.expect;
 
@@ -15,14 +13,14 @@ contract("MyToken Test", async (accounts) => {
     const [deployerAccount, recipientAccount, anotherAccount] = accounts;
 
     beforeEach(async () => {
-        this.token = await MyToken.new(100000);
+        this.token = await MyToken.new(process.env.INITIAL_TOKENS);
     });
 
     it("All tokens should be in deployer account ", async () => {
         let instance = this.token;
         let totalSupply = await instance.totalSupply();
 
-        expect(instance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(totalSupply);
+        return expect(instance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(totalSupply);
     });
 
     it("It should be able to send tokens between accounts ", async () => {
@@ -33,7 +31,7 @@ contract("MyToken Test", async (accounts) => {
         expect(instance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(totalSupply);
         expect(instance.transfer(recipientAccount, sendToken)).to.eventually.be.fulfilled;
         expect(instance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(totalSupply.sub(new BN(sendToken)));
-        expect(instance.balanceOf(recipientAccount)).to.be.eventually.be.a.bignumber.equal(new BN(sendToken));
+        return expect(instance.balanceOf(recipientAccount)).to.be.eventually.be.a.bignumber.equal(new BN(sendToken));
     });
 
     it("Its not possible to send more tokens than available", async () => {
@@ -41,6 +39,6 @@ contract("MyToken Test", async (accounts) => {
         let balanceOfDeployer = await instance.balanceOf(deployerAccount);
 
         expect(instance.transfer(recipientAccount, balanceOfDeployer + 1)).to.eventually.be.rejected;
-        expect(instance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(balanceOfDeployer);
+        return expect(instance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(balanceOfDeployer);
     });
 });
