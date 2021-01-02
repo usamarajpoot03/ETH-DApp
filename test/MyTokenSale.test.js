@@ -25,11 +25,7 @@ contract("MyTokenSale Test", async (accounts) => {
     it("all tokens should be in token sale smart contract by default", async () => {
         let instance = await MyToken.deployed();
         let instanceOfMyTokenSale = await MyTokenSale.deployed();
-        let instanceOfKYCContract = await KYCContract.deployed();
-        
-        //adding deployer account to whitelist by the deoplyer who is also the owner
-        await instanceOfKYCContract.setKycCompleted(deployerAccount);
-        
+
         const totalSupply = await instance.totalSupply();
         // return expect(instance.balanceOf(instanceOfMyTokenSale.address)).to.eventually.be.a.bignumber.equal(new BN(process.env.INITIAL_TOKENS));
         return expect(instance.balanceOf(MyTokenSale.address)).to.eventually.be.a.bignumber.equal(totalSupply);
@@ -40,12 +36,22 @@ contract("MyTokenSale Test", async (accounts) => {
         const myTokenInstance = await MyToken.deployed();
         const myTokenSaleInstance = await MyTokenSale.deployed();
         const balanceOfDeployer = await myTokenInstance.balanceOf(deployerAccount);
+        const instanceOfKYCContract = await KYCContract.deployed();
 
-        expect(myTokenSaleInstance.sendTransaction({from : deployerAccount, value: web3.utils.toWei("1","wei")})).to.be.rejected;
-        expect(myTokenInstance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(balanceOfDeployer));
+        expect(myTokenSaleInstance.sendTransaction({
+            from: deployerAccount,
+            value: web3.utils.toWei("1", "wei")
+        })).to.be.rejected;
+        expect(myTokenInstance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(balanceOfDeployer);
+
+        //adding deployer account to whitelist by the deoplyer who is also the owner
+        await instanceOfKYCContract.setKycCompleted(deployerAccount);
 
 
-        expect(myTokenSaleInstance.sendTransaction({from : deployerAccount, value: web3.utils.toWei("1","wei")})).to.be.fulfilled;
+        expect(myTokenSaleInstance.sendTransaction({
+            from: deployerAccount,
+            value: web3.utils.toWei("1", "wei")
+        })).to.be.fulfilled;
         return expect(myTokenInstance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(balanceOfDeployer.add(new BN(1)));
     });
 
