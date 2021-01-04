@@ -10,6 +10,8 @@ module.exports = async function (deployer) {
 
     //all accounts created
     const accounts = await web3.eth.getAccounts();
+
+    console.log("account using for depoyment: "+ accounts[0]);
     //deploy MyToken ERC20 Token with initial supply
     await deployer.deploy(MyToken, process.env.INITIAL_TOKENS);
     

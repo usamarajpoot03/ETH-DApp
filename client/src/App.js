@@ -9,7 +9,8 @@ import getWeb3 from "./getWeb3";
 import "./App.css";
 
 class App extends Component {
-  state = { loaded: false, addressToWhiteList: "0x12..." };
+  state = { loaded: false, addressToWhiteList: "0x12...",tokenSaleAddress: null,
+            tokensCount: 0 };
 
   componentDidMount = async () => {
     try {
@@ -39,7 +40,9 @@ class App extends Component {
 
       // Set this.web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({ loaded: true });
+      this.tokenTransferListner();
+      this.setState({ loaded: true, tokenSaleAddress: MyTokenSale.networks[this.networkId].address },
+        this.getTokensOfUser);
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -64,7 +67,21 @@ class App extends Component {
       alert("Successfully added : "+ this.state.addressToWhiteList + " in whitelist");
   }
 
+  getTokensOfUser = async () => {
+    const tokens = await this.myTokenInstance.methods.balanceOf(this.accounts[0]).call();
+    this.setState({
+      tokensCount: tokens
+    });
+  }
 
+  tokenTransferListner = () =>{
+
+    this.myTokenInstance.events.Transfer({to: this.accounts[0]}).on("data",this.getTokensOfUser);
+  }
+
+  buyTokens = async () => {
+    await this.myTokenSaleInstance.methods.buyTokens(this.accounts[0]).send({from: this.accounts[0],value: this.web3.utils.toWei("1","wei")});
+  }
   render() {
     if (!this.state.loaded) {
       return <div>Loading Web3, accounts, and contract...</div>;
@@ -79,6 +96,9 @@ class App extends Component {
         <button type="button" onClick={this.handleKYCWhiteListing}>
           Add
         </button>
+        <p>If you want to buy tokens you can send either( wei ) to this address: {this.state.tokenSaleAddress} </p>
+        <p>You have currently  {this.state.tokensCount} tokens</p>
+        <button type="button" onClick={this.buyTokens}> Buy More Tokens</button>
       </div>
     );
   }
