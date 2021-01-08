@@ -41,7 +41,7 @@ contract("MyTokenSale Test", async (accounts) => {
         expect(myTokenSaleInstance.sendTransaction({
             from: deployerAccount,
             value: web3.utils.toWei("1", "wei")
-        })).to.be.rejected;
+        })).to.eventually.be.rejected;
         expect(myTokenInstance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(balanceOfDeployer);
 
         //adding deployer account to whitelist by the deoplyer who is also the owner
@@ -51,7 +51,7 @@ contract("MyTokenSale Test", async (accounts) => {
         expect(myTokenSaleInstance.sendTransaction({
             from: deployerAccount,
             value: web3.utils.toWei("1", "wei")
-        })).to.be.fulfilled;
+        })).to.eventually.be.fulfilled;
         return expect(myTokenInstance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(balanceOfDeployer.add(new BN(1)));
     });
 
