@@ -10,7 +10,8 @@ import "./App.css";
 
 class App extends Component {
   state = { loaded: false, addressToWhiteList: "0x12...",tokenSaleAddress: null,
-            tokensCount: 0 };
+            tokensCount: 0,
+            totalSupply:0 };
 
   componentDidMount = async () => {
     try {
@@ -40,6 +41,7 @@ class App extends Component {
 
       // Set this.web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
+      this.getTotalSupply();
       this.tokenTransferListner();
       this.setState({ loaded: true, tokenSaleAddress: MyTokenSale.networks[this.networkId].address },
         this.getTokensOfUser);
@@ -51,7 +53,6 @@ class App extends Component {
       console.error(error);
     }
   };
-
 
   handleInputChange = (event) => {
     const target = event.target;
@@ -72,6 +73,15 @@ class App extends Component {
     this.setState({
       tokensCount: tokens
     });
+    this.getTotalSupply();
+  }
+
+  getTotalSupply = async () => {
+    const totalSupply = await this.myTokenInstance.methods.totalSupply().call();
+    console.log('totalSupply : '+totalSupply );
+      this.setState({
+        totalSupply: totalSupply
+    });
   }
 
   tokenTransferListner = () =>{
@@ -89,6 +99,8 @@ class App extends Component {
     return (
       <div className="App">
         <h1>Tokenize Assets</h1>
+        <p>Total: Supply  {this.state.totalSupply} tokens</p>
+
         <p>White Listing :</p>
        <p> Add Address to white list: </p>
         <input type="text" name="addressToWhiteList" value={this.state.addressToWhiteList}
