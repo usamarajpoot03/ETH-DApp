@@ -10,28 +10,26 @@ module.exports = async function (deployer) {
 
     //all accounts created
     const accounts = await web3.eth.getAccounts();
-
     console.log("account using for depoyment: "+ accounts[0]);
-    //deploy MyToken ERC20 Token with initial supply
-    await deployer.deploy(MyToken, process.env.INITIAL_TOKENS);
+
+    console.log("account using for depoyment: "+ deployer);
+    //deploy MyToken ERC20 Mintable Token so it doesn't need intital supply
+    //token will be created(minted) on the go
+    await deployer.deploy(MyToken);
     
-     //deply KYC Contract or customer validations
+    // deply KYC Contract or customer validations
     await deployer.deploy(KYCContract);
     
-    //deploy MyTokenSale ( Crowdsale ) with rate, account which will be used to have the receiving money,
+    //deploy MyTokenSale ( MintedCrowdsale ) with rate, account which will be used to have the receiving money,
     // & address of our ERC20 Token
     await deployer.deploy(MyTokenSale, 1, accounts[0], MyToken.address, KYCContract.address);
 
    
 
-    // get the deployed instance of our ERC20 Token
+    // get the deployed instance of our ERC20Mintable Token
     const tokenInstance = await MyToken.deployed();
 
-    //*
-    //send all the tokens to our crowdsale so it will be able to manage them ( sale, buy)
-    tokenInstance.transfer(MyTokenSale.address, process.env.INITIAL_TOKENS);
-
-    //* who is doing this call ? as the 
-    // ANS : Its the msg.sender which holds all the tokens initially
-    //: address which we are passing to crowdsale is only to receive money in exchange of tokens
+   
+    //Assign the minterrole for MyTokenSale so it will be able to mint the tokens on the go
+    await tokenInstance.addMinter(MyTokenSale.address);
 }

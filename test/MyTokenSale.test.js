@@ -17,26 +17,39 @@ const expect = chai.expect;
 contract("MyTokenSale Test", async (accounts) => {
     const [deployerAccount, recipientAccount, anotherAccount] = accounts;
 
-    it("there should be no token in deployerAccount ", async () => {
-        let instance = await MyToken.deployed();
-        return expect(instance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(new BN(0));
+    it("there should be no tokens minted for myTokenSale and deployer initially", async () => {
+        let myTokenInstance = await MyToken.deployed();
+        let myTokenSaleInstance = await MyTokenSale.deployed();
+        expect(myTokenInstance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(new BN(0));
+        return expect(myTokenInstance.balanceOf(myTokenSaleInstance.address)).to.eventually.be.a.bignumber.equal(new BN(0));
+    });
+    it("TokenSale must have minter role", async () => {
+        let myTokenInstance = await MyToken.deployed();
+        let myTokenSaleInstance = await MyTokenSale.deployed();
+
+        return expect(myTokenInstance.isMinter(myTokenSaleInstance.address)).to.eventually.be.true;
     });
 
-    it("all tokens should be in token sale smart contract by default", async () => {
-        let instance = await MyToken.deployed();
-        let instanceOfMyTokenSale = await MyTokenSale.deployed();
+    it("TokenSale KYC should reject unknown accounts", async () => {
 
-        const totalSupply = await instance.totalSupply();
-        // return expect(instance.balanceOf(instanceOfMyTokenSale.address)).to.eventually.be.a.bignumber.equal(new BN(process.env.INITIAL_TOKENS));
-        return expect(instance.balanceOf(MyTokenSale.address)).to.eventually.be.a.bignumber.equal(totalSupply);
+        let myTokenInstance = await MyToken.deployed();
+        let myTokenSaleInstance = await MyTokenSale.deployed();
 
+        let balanceOfDeployer = await myTokenInstance.balanceOf(deployerAccount);
+
+        expect(myTokenSaleInstance.sendTransaction({
+            from: deployerAccount,
+            value: web3.utils.toWei("1", "wei")
+        })).to.eventually.be.rejected;
+        return expect(myTokenInstance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(balanceOfDeployer);
     });
 
-    it("should be able to buy tokens ", async () => {
-        const myTokenInstance = await MyToken.deployed();
-        const myTokenSaleInstance = await MyTokenSale.deployed();
-        const balanceOfDeployer = await myTokenInstance.balanceOf(deployerAccount);
-        const instanceOfKYCContract = await KYCContract.deployed();
+    it("Token Sale should be able sell tokens for KYC Completed Accounts", async () => {
+
+        let myTokenInstance = await MyToken.deployed();
+        let myTokenSaleInstance = await MyTokenSale.deployed();
+        let instanceOfKYCContract = await KYCContract.deployed();
+        let balanceOfDeployer = await myTokenInstance.balanceOf(deployerAccount);
 
         expect(myTokenSaleInstance.sendTransaction({
             from: deployerAccount,
@@ -54,5 +67,4 @@ contract("MyTokenSale Test", async (accounts) => {
         })).to.eventually.be.fulfilled;
         return expect(myTokenInstance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(balanceOfDeployer.add(new BN(1)));
     });
-
 });

@@ -13,25 +13,31 @@ contract("MyToken Test", async (accounts) => {
     const [deployerAccount, recipientAccount, anotherAccount] = accounts;
 
     beforeEach(async () => {
-        this.token = await MyToken.new(process.env.INITIAL_TOKENS);
+        this.token = await MyToken.new();
     });
 
-    it("All tokens should be in deployer account ", async () => {
-        let instance = this.token;
-        let totalSupply = await instance.totalSupply();
+    it("Deployer should be able to mint tokens ", async () => {
+        const myTokenInstance = this.token;
 
-        return expect(instance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(totalSupply);
+        let balanceOfDeployer = await myTokenInstance.balanceOf(deployerAccount);
+        const newTokens = 1;
+        const newTotalTokens = balanceOfDeployer + newTokens;
+
+        expect(myTokenInstance.mint(deployerAccount, newTokens)).to.eventually.be.fulfilled;
+        return expect(myTokenInstance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(new BN(newTotalTokens));
     });
 
     it("It should be able to send tokens between accounts ", async () => {
-        const sendToken = 1;
-        let instance = this.token;
-        let totalSupply = await instance.totalSupply();
+        const myTokenInstance = this.token;
+        let balanceOfDeployer = await myTokenInstance.balanceOf(deployerAccount);
+        let balanceOfRecipient = await myTokenInstance.balanceOf(deployerAccount);
 
-        expect(instance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(totalSupply);
-        expect(instance.transfer(recipientAccount, sendToken)).to.eventually.be.fulfilled;
-        expect(instance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(totalSupply.sub(new BN(sendToken)));
-        return expect(instance.balanceOf(recipientAccount)).to.be.eventually.be.a.bignumber.equal(new BN(sendToken));
+        const newTokens = 1;
+
+        expect(myTokenInstance.mint(deployerAccount, newTokens)).to.eventually.be.fulfilled;
+        expect(myTokenInstance.transfer(recipientAccount, newTokens)).to.eventually.be.fulfilled;
+        expect(myTokenInstance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(balanceOfDeployer);
+        return expect(myTokenInstance.balanceOf(recipientAccount)).to.eventually.be.a.bignumber.equal(new BN(balanceOfRecipient + 1));
     });
 
     it("Its not possible to send more tokens than available", async () => {
@@ -41,4 +47,29 @@ contract("MyToken Test", async (accounts) => {
         expect(instance.transfer(recipientAccount, balanceOfDeployer + 1)).to.eventually.be.rejected;
         return expect(instance.balanceOf(deployerAccount)).to.eventually.be.a.bignumber.equal(balanceOfDeployer);
     });
+
+    it("Only minter can mint the tokens", async () => {
+        const myTokenInstance = this.token;
+        let balanceOfRecipient = await myTokenInstance.balanceOf(recipientAccount);
+
+        expect(myTokenInstance.mint(recipientAccount, 1, {
+            from: recipientAccount
+        })).to.eventually.be.rejected;
+        return expect(myTokenInstance.balanceOf(recipientAccount)).to.eventually.be.a.bignumber.equal(new BN(balanceOfRecipient));
+    });
+
+    it("minter role can be assigned", async () => {
+        const myTokenInstance = this.token;
+        let balanceOfRecipient = await myTokenInstance.balanceOf(recipientAccount);
+        let newTokens = 1;
+
+        expect(myTokenInstance.addMinter(recipientAccount)).to.eventually.be.fulfilled;
+
+        expect(myTokenInstance.mint(recipientAccount, newTokens, {
+            from: recipientAccount
+        })).to.eventually.be.fulfilled;
+        return expect(myTokenInstance.balanceOf(recipientAccount)).to.eventually.be.a.bignumber.equal(new BN(balanceOfRecipient + newTokens));
+    });
+
+
 });

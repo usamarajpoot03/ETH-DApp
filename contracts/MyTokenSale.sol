@@ -1,7 +1,7 @@
 pragma solidity ^0.6.2;
-import "./Crowdsale.sol";
+import "./MintedCrowdsale.sol";
 import "./KYCContract.sol";
-contract MyTokenSale is Crowdsale {
+contract MyTokenSale is MintedCrowdsale {
 
     KYCContract kyc;
     constructor(
@@ -10,14 +10,14 @@ contract MyTokenSale is Crowdsale {
         IERC20 token,
         KYCContract _kyc
     )
-        Crowdsale(rate, wallet, token)
+        MintedCrowdsale(rate, wallet, token)
         public
     {
         kyc = _kyc;
     }
 
     function _preValidatePurchase(address beneficiary, uint256 weiAmount) internal view override {
-       super._preValidatePurchase(beneficiary, weiAmount);
+        super._preValidatePurchase(beneficiary, weiAmount);
         require(kyc.kycCompleted(msg.sender),"KYC Not Completed. Transaction now allowed");
     }
 }
