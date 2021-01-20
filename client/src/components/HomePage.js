@@ -136,9 +136,14 @@ class HomePage extends React.Component {
         <Container>
           <Row className="RowSpacing">
             <Col>
-              <div style={{ float: "left" }}>
-                {" "}
-                <Form inline>
+
+              <h5 style={{ float: "left" }}>
+                <Badge variant="secondary">
+                  Total Supply ( no of tokens ) : {this.state.totalSupply}
+                </Badge>
+              </h5>
+              <div style={{ float: "right" }}>
+              <Form inline>
                   <Form.Group controlId="formBasicEmail">
                     <Form.Label>Account Address : </Form.Label>
 
@@ -149,18 +154,16 @@ class HomePage extends React.Component {
                       name="addressToWhiteList"
                       placeholder="0x23AEFD3A3454556456324323434D"
                     />
-
-                    <Button type="button" onClick={this.handleKYCWhiteListing}>
+                    <Button
+                      variant="info"
+                      type="button"
+                      onClick={this.handleKYCWhiteListing}
+                    >
                       Add
                     </Button>
                   </Form.Group>
                 </Form>
               </div>
-              <h5 style={{ float: "right" }}>
-                <Badge variant="secondary">
-                  Total Supply ( no of tokens ) : {this.state.totalSupply}
-                </Badge>
-              </h5>
             </Col>
           </Row>
 
