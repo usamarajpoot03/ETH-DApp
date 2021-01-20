@@ -1582,6 +1582,45 @@
     "version": "0.6.12+commit.27d51765.Emscripten.clang"
   },
   "networks": {
+    "5": {
+      "events": {
+        "0x6faf93231a456e552dbc9961f58d9713ee4f2e69d15f1975b050ef0911053a7b": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "purchaser",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "beneficiary",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "value",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "TokensPurchased",
+          "type": "event",
+          "signature": "0x6faf93231a456e552dbc9961f58d9713ee4f2e69d15f1975b050ef0911053a7b"
+        }
+      },
+      "links": {},
+      "address": "0x2139E39468D7F6b30485041e88ADF6Dc88DD7d20",
+      "transactionHash": "0x77c3e396fe237aad86f85f0159a2b688f011a400940bde448a4502f4ffedf47d"
+    },
     "5777": {
       "events": {
         "0x6faf93231a456e552dbc9961f58d9713ee4f2e69d15f1975b050ef0911053a7b": {
@@ -1623,7 +1662,7 @@
     }
   },
   "schemaVersion": "3.0.20",
-  "updatedAt": "2021-01-18T16:21:18.310Z",
+  "updatedAt": "2021-01-18T21:25:08.817Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

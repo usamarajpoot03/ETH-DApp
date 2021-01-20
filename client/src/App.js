@@ -1,116 +1,18 @@
 import React, { Component } from "react";
-
-import MyToken from "./contracts/MyToken.json";
-import MyTokenSale from "./contracts/MyTokenSale.json";
-import KYCContract from "./contracts/KYCContract.json";
-
-import getWeb3 from "./getWeb3";
-
 import "./App.css";
 
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Navbar } from "react-bootstrap";
+import HomePage from "./components/HomePage";
+
 class App extends Component {
-  state = { loaded: false, addressToWhiteList: "0x12...",tokenSaleAddress: null,
-            tokensCount: 0,
-            totalSupply:0 };
-
-  componentDidMount = async () => {
-    try {
-      // Get network provider and this.web3 instance.
-      this.web3 = await getWeb3();
-
-      // Use web3 to get the user's accounts.
-      this.accounts = await this.web3.eth.getAccounts();
-
-      // Get the contract instance.
-      this.networkId = await this.web3.eth.net.getId();
-
-      this.myTokenInstance = new this.web3.eth.Contract(
-        MyToken.abi,
-        MyToken.networks[this.networkId] && MyToken.networks[this.networkId].address,
-      );
-
-      this.myTokenSaleInstance = new this.web3.eth.Contract(
-        MyTokenSale.abi,
-        MyTokenSale.networks[this.networkId] && MyTokenSale.networks[this.networkId].address,
-      );
-
-      this.kycInstance = new this.web3.eth.Contract(
-        KYCContract.abi,
-        KYCContract.networks[this.networkId] && KYCContract.networks[this.networkId].address,
-      );
-
-      // Set this.web3, accounts, and contract to the state, and then proceed with an
-      // example of interacting with the contract's methods.
-      this.getTotalSupply();
-      this.tokenTransferListner();
-      this.setState({ loaded: true, tokenSaleAddress: MyTokenSale.networks[this.networkId].address },
-        this.getTokensOfUser);
-    } catch (error) {
-      // Catch any errors for any of the above operations.
-      alert(
-        `Failed to load this.web3, accounts, or contract. Check console for details.`,
-      );
-      console.error(error);
-    }
-  };
-
-  handleInputChange = (event) => {
-    const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
-    const name = target.name;
-    this.setState({ 
-      [name]: value 
-    });
-  }
-
-  handleKYCWhiteListing = async () => {
-      await this.kycInstance.methods.setKycCompleted(this.state.addressToWhiteList).send({from:this.accounts[0]})
-      alert("Successfully added : "+ this.state.addressToWhiteList + " in whitelist");
-  }
-
-  getTokensOfUser = async () => {
-    const tokens = await this.myTokenInstance.methods.balanceOf(this.accounts[0]).call();
-    this.setState({
-      tokensCount: tokens
-    });
-    this.getTotalSupply();
-  }
-
-  getTotalSupply = async () => {
-    const totalSupply = await this.myTokenInstance.methods.totalSupply().call();
-    console.log('totalSupply : '+totalSupply );
-      this.setState({
-        totalSupply: totalSupply
-    });
-  }
-
-  tokenTransferListner = () =>{
-
-    this.myTokenInstance.events.Transfer({to: this.accounts[0]}).on("data",this.getTokensOfUser);
-  }
-
-  buyTokens = async () => {
-    await this.myTokenSaleInstance.methods.buyTokens(this.accounts[0]).send({from: this.accounts[0],value: this.web3.utils.toWei("1","wei")});
-  }
   render() {
-    if (!this.state.loaded) {
-      return <div>Loading Web3, accounts, and contract...</div>;
-    }
     return (
       <div className="App">
-        <h1>Tokenize Assets</h1>
-        <p>Total: Supply  {this.state.totalSupply} tokens</p>
-
-        <p>White Listing :</p>
-       <p> Add Address to white list: </p>
-        <input type="text" name="addressToWhiteList" value={this.state.addressToWhiteList}
-        onChange={ this.handleInputChange }></input>
-        <button type="button" onClick={this.handleKYCWhiteListing}>
-          Add
-        </button>
-        <p>If you want to buy tokens you can send either( wei ) to this address: {this.state.tokenSaleAddress} </p>
-        <p>You have currently  {this.state.tokensCount} tokens</p>
-        <button type="button" onClick={this.buyTokens}> Buy More Tokens</button>
+        <Navbar bg="light" expand="lg">
+          <Navbar.Brand>ERC20 Mintable Token ( Tokenize Assets )</Navbar.Brand>
+        </Navbar>
+        <HomePage></HomePage>
       </div>
     );
   }
