@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/Tokenize-Assets/static/css/main.05322ce4.chunk.css",
+    "main.js": "/Tokenize-Assets/static/js/main.01acf07f.chunk.js",
+    "main.js.map": "/Tokenize-Assets/static/js/main.01acf07f.chunk.js.map",
+    "runtime-main.js": "/Tokenize-Assets/static/js/runtime-main.fcb6b235.js",
+    "runtime-main.js.map": "/Tokenize-Assets/static/js/runtime-main.fcb6b235.js.map",
+    "static/css/2.af317cf5.chunk.css": "/Tokenize-Assets/static/css/2.af317cf5.chunk.css",
+    "static/js/2.f2183793.chunk.js": "/Tokenize-Assets/static/js/2.f2183793.chunk.js",
+    "static/js/2.f2183793.chunk.js.map": "/Tokenize-Assets/static/js/2.f2183793.chunk.js.map",
+    "index.html": "/Tokenize-Assets/index.html",
+    "precache-manifest.69c4ea88bf3d9b3f3fa2b38d2410aafa.js": "/Tokenize-Assets/precache-manifest.69c4ea88bf3d9b3f3fa2b38d2410aafa.js",
+    "service-worker.js": "/Tokenize-Assets/service-worker.js",
+    "static/css/2.af317cf5.chunk.css.map": "/Tokenize-Assets/static/css/2.af317cf5.chunk.css.map",
+    "static/css/main.05322ce4.chunk.css.map": "/Tokenize-Assets/static/css/main.05322ce4.chunk.css.map"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.fcb6b235.js",
+    "static/css/2.af317cf5.chunk.css",
+    "static/js/2.f2183793.chunk.js",
+    "static/css/main.05322ce4.chunk.css",
+    "static/js/main.01acf07f.chunk.js"
+  ]
+}
