@@ -1,24 +1,25 @@
 {
   "files": {
-    "main.css": "/Tokenize-Assets/static/css/main.05322ce4.chunk.css",
-    "main.js": "/Tokenize-Assets/static/js/main.01acf07f.chunk.js",
-    "main.js.map": "/Tokenize-Assets/static/js/main.01acf07f.chunk.js.map",
-    "runtime-main.js": "/Tokenize-Assets/static/js/runtime-main.fcb6b235.js",
-    "runtime-main.js.map": "/Tokenize-Assets/static/js/runtime-main.fcb6b235.js.map",
-    "static/css/2.af317cf5.chunk.css": "/Tokenize-Assets/static/css/2.af317cf5.chunk.css",
-    "static/js/2.f2183793.chunk.js": "/Tokenize-Assets/static/js/2.f2183793.chunk.js",
-    "static/js/2.f2183793.chunk.js.map": "/Tokenize-Assets/static/js/2.f2183793.chunk.js.map",
-    "index.html": "/Tokenize-Assets/index.html",
-    "precache-manifest.69c4ea88bf3d9b3f3fa2b38d2410aafa.js": "/Tokenize-Assets/precache-manifest.69c4ea88bf3d9b3f3fa2b38d2410aafa.js",
-    "service-worker.js": "/Tokenize-Assets/service-worker.js",
-    "static/css/2.af317cf5.chunk.css.map": "/Tokenize-Assets/static/css/2.af317cf5.chunk.css.map",
-    "static/css/main.05322ce4.chunk.css.map": "/Tokenize-Assets/static/css/main.05322ce4.chunk.css.map"
+    "main.css": "/ETH-DApp/static/css/main.05322ce4.chunk.css",
+    "main.js": "/ETH-DApp/static/js/main.c5a314e7.chunk.js",
+    "main.js.map": "/ETH-DApp/static/js/main.c5a314e7.chunk.js.map",
+    "runtime-main.js": "/ETH-DApp/static/js/runtime-main.f1222af4.js",
+    "runtime-main.js.map": "/ETH-DApp/static/js/runtime-main.f1222af4.js.map",
+    "static/css/2.68b68f03.chunk.css": "/ETH-DApp/static/css/2.68b68f03.chunk.css",
+    "static/js/2.960d5639.chunk.js": "/ETH-DApp/static/js/2.960d5639.chunk.js",
+    "static/js/2.960d5639.chunk.js.map": "/ETH-DApp/static/js/2.960d5639.chunk.js.map",
+    "index.html": "/ETH-DApp/index.html",
+    "precache-manifest.46e6e9568c4816cb7e7e23eca6cb9cf1.js": "/ETH-DApp/precache-manifest.46e6e9568c4816cb7e7e23eca6cb9cf1.js",
+    "service-worker.js": "/ETH-DApp/service-worker.js",
+    "static/css/2.68b68f03.chunk.css.map": "/ETH-DApp/static/css/2.68b68f03.chunk.css.map",
+    "static/css/main.05322ce4.chunk.css.map": "/ETH-DApp/static/css/main.05322ce4.chunk.css.map",
+    "static/media/font-awesome.css": "/ETH-DApp/static/media/fontawesome-webfont.fee66e71.woff"
   },
   "entrypoints": [
-    "static/js/runtime-main.fcb6b235.js",
-    "static/css/2.af317cf5.chunk.css",
-    "static/js/2.f2183793.chunk.js",
+    "static/js/runtime-main.f1222af4.js",
+    "static/css/2.68b68f03.chunk.css",
+    "static/js/2.960d5639.chunk.js",
     "static/css/main.05322ce4.chunk.css",
-    "static/js/main.01acf07f.chunk.js"
+    "static/js/main.c5a314e7.chunk.js"
   ]
 }
